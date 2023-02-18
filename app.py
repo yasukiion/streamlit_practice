@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from PIL import Image
+import shutil
 
 st.checkbox("オラオラオラオラオラ") #引数に入れることでboolを返す
 st.button("スタンド使いは引かれ合う") #引数に入れるとboolで返す
@@ -12,7 +13,7 @@ st.sidebar.text_input("一味違うのね") #引数に入力内容を渡せる
 st.sidebar.text_area("敵でもない、味方でもない、ただ希望なのだ")
 
 def main():
-    st.title("Upload and Display Images")
+    st.title("「覚悟」をアップロードしてください")
 
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
