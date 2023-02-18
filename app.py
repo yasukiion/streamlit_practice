@@ -2,23 +2,53 @@ import streamlit as st
 import os
 from PIL import Image
 import shutil
+from streamlit.hashing import _CodeHasher
+from streamlit.report_thread import REPORT_CONTEXT_ATTR_NAME
+from streamlit.server.Server import Server
+from streamlit.server.Server import ServerState
+import model.py
 
-st.checkbox("オラオラオラオラオラ") #引数に入れることでboolを返す
-st.button("スタンド使いは引かれ合う") #引数に入れるとboolで返す
-st.selectbox("メニューリスト", ("覚悟はいいか", "復讐とは自分の運命に決着をつけることダァ!", "最高に「ハイ」ッッてやつダァァ")) #第一引数：リスト名、第二引数：選択肢
-st.multiselect("つまづいたっていいじゃあないか（複数選択可）", ("そうだ、素数を数えて落ち着こう....", "イチジクのジャム", "カブトムシ")) #第一引数：リスト名、第二引数：選択肢、複数選択可
-st.radio("故郷に帰ったら何を食べたい", ("熱々のマルガリータ", "ドルチェ", "ロードローラー")) #第一引数：リスト名（選択肢群の上に表示）、第二引数：選択肢
-# 以下をサイドバーに表示
-st.sidebar.text_input("一味違うのね") #引数に入力内容を渡せる
-st.sidebar.text_area("敵でもない、味方でもない、ただ希望なのだ")
 
-import os
-import shutil
-import streamlit as st
-from PIL import Image
+def get_report_ctx():
+    """Returns the ReportContext for the running thread or None."""
+    return getattr(_get_session(), REPORT_CONTEXT_ATTR_NAME, None)
+
+def get_session():
+    session_id = get_report_ctx().session_id
+    session_info = Server.get_current()._get_session_info(session_id)
+    return session_info.session
+
+def _get_session():
+    session = None
+    ctx = ReportThread.get_report_ctx()
+
+    if ctx is not None:
+        session = getattr(ctx, '_session', None)
+
+        if session is None:
+            session = Server.get_current().get_session_info(ctx.session_id).session
+            setattr(ctx, '_session', session)
+
+    return session
+
+class SessionState:
+    def __init__(self, **kwargs):
+        self._state = kwargs
+
+    def __getattr__(self, attr):
+        return self._state[attr]
+
+    def __setattr__(self, attr, value):
+        if attr != '_state':
+            self._state[attr] = value
+        else:
+            super().__setattr__(attr, value)
+
+# SessionStateを初期化する
+ss = SessionState(name='', subscribe=False)
 
 def main():
-    st.title("「覚悟」をアップロードしてください")
+    st.title("結婚式場の画像をアップロードしてください")
 
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
@@ -46,6 +76,7 @@ def main():
         if submit_button:
             selected_files = [file_name for file_name in os.listdir(os.path.join(os.path.splitext(folder.name)[0], image_folder)) if file_name.split(".")[-1] in image_extensions]
             st.write(selected_files)
+            model.py.process_data(selected_files)
 
 if __name__ == "__main__":
     main()
