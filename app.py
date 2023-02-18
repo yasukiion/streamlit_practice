@@ -2,49 +2,46 @@ import streamlit as st
 import os
 from PIL import Image
 import shutil
-from streamlit.report_thread import REPORT_CONTEXT_ATTR_NAME
-from streamlit.server.Server import Server
-from streamlit.server.Server import ServerState
 import model.py
 
 
-def get_report_ctx():
-    """Returns the ReportContext for the running thread or None."""
-    return getattr(_get_session(), REPORT_CONTEXT_ATTR_NAME, None)
+# def get_report_ctx():
+#     """Returns the ReportContext for the running thread or None."""
+#     return getattr(_get_session(), REPORT_CONTEXT_ATTR_NAME, None)
 
-def get_session():
-    session_id = get_report_ctx().session_id
-    session_info = Server.get_current()._get_session_info(session_id)
-    return session_info.session
+# def get_session():
+#     session_id = get_report_ctx().session_id
+#     session_info = Server.get_current()._get_session_info(session_id)
+#     return session_info.session
 
-def _get_session():
-    session = None
-    ctx = ReportThread.get_report_ctx()
+# def _get_session():
+#     session = None
+#     ctx = ReportThread.get_report_ctx()
 
-    if ctx is not None:
-        session = getattr(ctx, '_session', None)
+#     if ctx is not None:
+#         session = getattr(ctx, '_session', None)
 
-        if session is None:
-            session = Server.get_current().get_session_info(ctx.session_id).session
-            setattr(ctx, '_session', session)
+#         if session is None:
+#             session = Server.get_current().get_session_info(ctx.session_id).session
+#             setattr(ctx, '_session', session)
 
-    return session
+#     return session
 
-class SessionState:
-    def __init__(self, **kwargs):
-        self._state = kwargs
+# class SessionState:
+#     def __init__(self, **kwargs):
+#         self._state = kwargs
 
-    def __getattr__(self, attr):
-        return self._state[attr]
+#     def __getattr__(self, attr):
+#         return self._state[attr]
 
-    def __setattr__(self, attr, value):
-        if attr != '_state':
-            self._state[attr] = value
-        else:
-            super().__setattr__(attr, value)
+#     def __setattr__(self, attr, value):
+#         if attr != '_state':
+#             self._state[attr] = value
+#         else:
+#             super().__setattr__(attr, value)
 
-# SessionStateを初期化する
-ss = SessionState(name='', subscribe=False)
+# # SessionStateを初期化する
+# ss = SessionState(name='', subscribe=False)
 
 def main():
     st.title("結婚式場の画像をアップロードしてください")
