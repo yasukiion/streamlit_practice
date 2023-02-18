@@ -8,3 +8,20 @@ st.radio("故郷に帰ったら何を食べたい", ("熱々のマルガリー�
 # 以下をサイドバーに表示
 st.sidebar.text_input("一味違うのね") #引数に入力内容を渡せる
 st.sidebar.text_area("敵でもない、味方でもない、ただ希望なのだ")
+
+# マルチアップロードのためのファンクション
+def multi_file_uploader():
+    uploaded_files = st.file_uploader("Choose your image files", accept_multiple_files=True)
+    return uploaded_files
+
+# Streamlitアプリケーション
+def main():
+    # ファイルアップローダーの表示
+    uploaded_files = multi_file_uploader()
+    if uploaded_files is not None:
+        for file in uploaded_files:
+            # 画像ファイルを表示
+            st.image(file)
+
+if __name__ == '__main__':
+    main()
