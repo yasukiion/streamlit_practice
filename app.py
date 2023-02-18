@@ -9,19 +9,34 @@ st.radio("故郷に帰ったら何を食べたい", ("熱々のマルガリー�
 st.sidebar.text_input("一味違うのね") #引数に入力内容を渡せる
 st.sidebar.text_area("敵でもない、味方でもない、ただ希望なのだ")
 
-# マルチアップロードのためのファンクション
-def multi_file_uploader():
-    uploaded_files = st.file_uploader("Choose your image files", accept_multiple_files=True)
-    return uploaded_files
+import os
+import streamlit as st
+
+# フォルダ内の画像ファイルを読み込む関数
+def load_images_from_folder(folder):
+    images = []
+    for filename in os.listdir(folder):
+        if any(filename.lower().endswith(ext) for ext in ['.jpeg', '.jpg', '.png']):
+            img_path = os.path.join(folder, filename)
+            images.append(img_path)
+    return images
 
 # Streamlitアプリケーション
 def main():
-    # ファイルアップローダーの表示
-    uploaded_files = multi_file_uploader()
-    if uploaded_files is not None:
-        for file in uploaded_files:
-            # 画像ファイルを表示
-            st.image(file)
+    # フォルダの選択
+    folder = st.sidebar.selectbox("Select a folder", os.listdir("path/to/your/folder"))
+    folder_path = os.path.join("path/to/your/folder", folder)
+
+    # フォルダ内の画像ファイルを読み込む
+    image_paths = load_images_from_folder(folder_path)
+
+    # 画像ファイルを表示
+    if len(image_paths) > 0:
+        for path in image_paths:
+            st.image(path)
+    else:
+        st.warning("No image file found in the selected folder")
 
 if __name__ == '__main__':
     main()
+
