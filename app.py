@@ -2,7 +2,6 @@ import streamlit as st
 import os
 from PIL import Image
 import shutil
-from streamlit.hashing import _CodeHasher
 from streamlit.report_thread import REPORT_CONTEXT_ATTR_NAME
 from streamlit.server.Server import Server
 from streamlit.server.Server import ServerState
