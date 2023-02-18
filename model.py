@@ -5,5 +5,3 @@ from app import model
 def process_data(selected_files):
     print(f"Received data: name={model.selected_files}")
 
-process_data()
-

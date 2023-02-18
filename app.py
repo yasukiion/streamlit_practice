@@ -2,7 +2,6 @@ import streamlit as st
 import os
 from PIL import Image
 import shutil
-import model
 
 
 # def get_report_ctx():
