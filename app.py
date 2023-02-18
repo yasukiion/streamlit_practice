@@ -12,6 +12,11 @@ st.radio("故郷に帰ったら何を食べたい", ("熱々のマルガリー�
 st.sidebar.text_input("一味違うのね") #引数に入力内容を渡せる
 st.sidebar.text_area("敵でもない、味方でもない、ただ希望なのだ")
 
+import os
+import shutil
+import streamlit as st
+from PIL import Image
+
 def main():
     st.title("「覚悟」をアップロードしてください")
 
@@ -34,6 +39,13 @@ def main():
                 image_path = os.path.join(os.path.join(os.path.splitext(folder.name)[0], image_folder), file_name)
                 image = Image.open(image_path)
                 st.image(image, caption=file_name, use_column_width=True)
+
+        # サブミットボタンでフォームをサブミットする
+        form = st.form(key='my-form')
+        submit_button = form.form_submit_button('Submit')
+        if submit_button:
+            selected_files = [file_name for file_name in os.listdir(os.path.join(os.path.splitext(folder.name)[0], image_folder)) if file_name.split(".")[-1] in image_extensions]
+            st.write(selected_files)
 
 if __name__ == "__main__":
     main()
