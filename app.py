@@ -2,6 +2,7 @@ import streamlit as st
 import os
 from PIL import Image
 import shutil
+from model import process_data
 
 
 # def get_report_ctx():
