@@ -74,6 +74,7 @@ def main():
             st.write(selected_files)
             model.process_data(selected_files)
 
+
 if __name__ == "__main__":
     main()
 
