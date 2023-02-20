@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from PIL import Image
 import shutil
-from model import process_data
+import model
 
 
 # def get_report_ctx():
@@ -72,7 +72,7 @@ def main():
         if submit_button:
             selected_files = [file_name for file_name in os.listdir(os.path.join(os.path.splitext(folder.name)[0], image_folder)) if file_name.split(".")[-1] in image_extensions]
             st.write(selected_files)
-            model.py.process_data(selected_files)
+            model.process_data(selected_files)
 
 if __name__ == "__main__":
     main()

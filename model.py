@@ -9,5 +9,3 @@ def process_data(selected_files):
         image = Image.open(selected_file).convert('L')  # convert to grayscale
         data = np.array(image)  # convert to numpy array
         st.image(data, caption=selected_file, use_column_width=True, format='JPEG')
-
-
