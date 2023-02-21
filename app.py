@@ -40,6 +40,13 @@ def main():
                 image_path = os.path.join(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)), file_name)
                 image = Image.open(image_path)
                 st.image(image, caption=file_name, use_column_width=True)
+                if image is not None:
+                  # アップロードされたファイルを保存する
+                  file_path = save_uploaded_file(image)
+                  st.write("Saved file:", file_path)
+                  #selected_files.append(file_path)
+                else:
+                  st.write("No file uploaded")
 
         # サブミットボタンでフォームをサブミットする
         form = st.form(key='my-form')
@@ -47,16 +54,6 @@ def main():
         if submit_button:
             selected_files = [file_name for file_name in os.listdir(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)) if file_name.split(".")[-1] in image_extensions]
             st.write(selected_files)
-
-            # ファイルをアップロードする
-            uploaded_file = st.file_uploader("Choose a file", type=["jpg", "jpeg", "png"])
-            if uploaded_file is not None:
-              # アップロードされたファイルを保存する
-              file_path = save_uploaded_file(uploaded_file)
-              st.write("Saved file:", file_path)
-              selected_files.append(file_path)
-            else:
-              st.write("No file uploaded")
             model.process_data(selected_files)
 
 if __name__ == "__main__":
