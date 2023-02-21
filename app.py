@@ -22,7 +22,7 @@ def main():
 
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
-    UPLOAD_FOLDER = "uploads"
+    UPLOAD_FOLDER = "./uploads"
     if folder:
         # zipファイルを展開する
         path = os.path.join(os.getcwd(), folder.name)
