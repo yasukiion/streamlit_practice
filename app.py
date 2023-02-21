@@ -4,45 +4,6 @@ from PIL import Image
 import shutil
 import model
 
-
-# def get_report_ctx():
-#     """Returns the ReportContext for the running thread or None."""
-#     return getattr(_get_session(), REPORT_CONTEXT_ATTR_NAME, None)
-
-# def get_session():
-#     session_id = get_report_ctx().session_id
-#     session_info = Server.get_current()._get_session_info(session_id)
-#     return session_info.session
-
-# def _get_session():
-#     session = None
-#     ctx = ReportThread.get_report_ctx()
-
-#     if ctx is not None:
-#         session = getattr(ctx, '_session', None)
-
-#         if session is None:
-#             session = Server.get_current().get_session_info(ctx.session_id).session
-#             setattr(ctx, '_session', session)
-
-#     return session
-
-# class SessionState:
-#     def __init__(self, **kwargs):
-#         self._state = kwargs
-
-#     def __getattr__(self, attr):
-#         return self._state[attr]
-
-#     def __setattr__(self, attr, value):
-#         if attr != '_state':
-#             self._state[attr] = value
-#         else:
-#             super().__setattr__(attr, value)
-
-# # SessionStateを初期化する
-# ss = SessionState(name='', subscribe=False)
-
 # フォルダのパスを指定
 UPLOAD_FOLDER = "./uploads"
 
@@ -93,6 +54,7 @@ def main():
               # アップロードされたファイルを保存する
               file_path = save_uploaded_file(uploaded_file)
               st.write("Saved file:", file_path)
+              selected_files.append(file_path)
             else:
               st.write("No file uploaded")
             model.process_data(selected_files)
