@@ -40,13 +40,9 @@ def main():
                 image_path = os.path.join(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)), file_name)
                 image = Image.open(image_path)
                 st.image(image, caption=file_name, use_column_width=True)
-                if image is not None:
-                  # アップロードされたファイルを保存する
-                  file_path = save_uploaded_file(image)
-                  st.write("Saved file:", file_path)
-                  #selected_files.append(file_path)
-                else:
-                  st.write("No file uploaded")
+                file_path = save_uploaded_file(image)
+                st.write("Saved file:", file_path)
+                #selected_files.append(file_path)
 
         # サブミットボタンでフォームをサブミットする
         form = st.form(key='my-form')
