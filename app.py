@@ -5,7 +5,7 @@ import shutil
 import model
 
 # フォルダのパスを指定
-UPLOAD_FOLDER = "./uploads"
+UPLOAD_FOLDER = "./steam/uploads"
 
 def save_uploaded_file(uploaded_file):
     # フォルダが存在しない場合は作成する
