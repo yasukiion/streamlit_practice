@@ -40,8 +40,8 @@ def main():
                 image_path = os.path.join(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)), file_name)
                 image = Image.open(image_path)
                 st.image(image, caption=file_name, use_column_width=True)
-                file_path = save_uploaded_file(image_path)
-                st.write("Saved file:", image_path)
+                file_path = save_uploaded_file(folder)
+                st.write("Saved file:", file_path)
                 #selected_files.append(file_path)
 
         # サブミットボタンでフォームをサブミットする
