@@ -42,9 +42,8 @@ def main():
                 st.image(image, caption=file_name, use_column_width=True)
                 file_path = save_uploaded_file(folder)
                 st.write("Saved file:", file_path)
-
                 # Zipファイルを展開する
-                with ZipFile(path, "r") as zip:
+                with ZipFile(file_path, "r") as zip:
                     zip.extractall(UPLOAD_FOLDER)
 
         # サブミットボタンでフォームをサブミットする
