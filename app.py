@@ -45,7 +45,8 @@ def main():
 
         # Zipファイルを展開する
         with ZipFile(folder, "r") as zip:
-          zip.extractall(UPLOAD_FOLDER)
+          zip.extractall(UPLOAD_FOLDER,encoding='utf-8')
+        os.remove("./steam/uploads/__MACOSX")
 
         # サブミットボタンでフォームをサブミットする
         form = st.form(key='my-form')
