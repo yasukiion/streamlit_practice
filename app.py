@@ -43,8 +43,8 @@ def main():
                 file_path = save_uploaded_file(folder)
                 st.write("Saved file:", file_path)
         # Zipファイルを展開する
-        with ZipFile(file_path, "r") as zip:
-          zip.extractall(UPLOAD_FOLDER)
+        with ZipFile(folder, "r") as zip:
+          zip.extractall(r"./stream/uploads")
 
         # サブミットボタンでフォームをサブミットする
         form = st.form(key='my-form')
