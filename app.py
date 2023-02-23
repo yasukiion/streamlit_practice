@@ -23,7 +23,7 @@ def main():
 
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
-    UPLOAD_FOLDER = "./stream/uploads"
+    UPLOAD_FOLDER = "./steam/uploads"
     if folder:
         # zipファイルを展開する
         path = os.path.join(os.getcwd(), folder.name)
@@ -42,6 +42,7 @@ def main():
                 st.image(image, caption=file_name, use_column_width=True)
                 file_path = save_uploaded_file(folder)
                 st.write("Saved file:", file_path)
+
         # Zipファイルを展開する
         with ZipFile(folder, "r") as zip:
           zip.extractall(UPLOAD_FOLDER)
