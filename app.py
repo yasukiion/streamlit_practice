@@ -3,6 +3,7 @@ import os
 from PIL import Image
 import shutil
 import model
+from zipfile import ZipFile
 
 # フォルダのパスを指定
 UPLOAD_FOLDER = "./steam/uploads"
@@ -22,7 +23,7 @@ def main():
 
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
-    UPLOAD_FOLDER = "./uploads"
+    UPLOAD_FOLDER = "./stream/uploads"
     if folder:
         # zipファイルを展開する
         path = os.path.join(os.getcwd(), folder.name)
@@ -30,7 +31,6 @@ def main():
             f.write(folder.getbuffer())
         os.makedirs(os.path.join(os.getcwd(), UPLOAD_FOLDER), exist_ok=True)
         shutil.unpack_archive(path, os.path.join(os.getcwd(),UPLOAD_FOLDER))
-        os.remove(path)
 
         # フォルダ内の画像を表示する
         image_extensions = ["jpg", "jpeg", "png"]
@@ -42,7 +42,10 @@ def main():
                 st.image(image, caption=file_name, use_column_width=True)
                 file_path = save_uploaded_file(folder)
                 st.write("Saved file:", file_path)
-                #selected_files.append(file_path)
+
+                # Zipファイルを展開する
+                with ZipFile(path, "r") as zip:
+                    zip.extractall(UPLOAD_FOLDER)
 
         # サブミットボタンでフォームをサブミットする
         form = st.form(key='my-form')
