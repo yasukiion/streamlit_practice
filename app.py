@@ -33,16 +33,15 @@ def main():
         shutil.unpack_archive(path, os.path.join(os.getcwd(),UPLOAD_FOLDER))
 
         # フォルダ内の画像を表示する
-        image_extensions = ["jpg", "jpeg", "png"]
-        image_folder = st.sidebar.selectbox("Select a folder", os.listdir(os.path.join(os.getcwd(),UPLOAD_FOLDER)))
-        for file_name in os.listdir(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder))):
-            if file_name.split(".")[-1] in image_extensions:
-                image_path = os.path.join(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)), file_name)
-                image = Image.open(image_path)
-                st.image(image, caption=file_name, use_column_width=True)
-                file_path = save_uploaded_file(folder)
-                st.write("Saved file:", file_path)
-
+        #image_extensions = ["jpg", "jpeg", "png"]
+        #image_folder = st.sidebar.selectbox("Select a folder", os.listdir(os.path.join(os.getcwd(),UPLOAD_FOLDER)))
+        #for file_name in os.listdir(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder))):
+        #   if file_name.split(".")[-1] in image_extensions:
+         #       image_path = os.path.join(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)), file_name)
+          #      image = Image.open(image_path)
+           #     st.image(image, caption=file_name, use_column_width=True)
+            #    file_path = save_uploaded_file(folder)
+             #   st.write("Saved file:", file_path)
         # Zipファイルを展開する
         with ZipFile(folder, "r") as zip:
           zip.extractall(UPLOAD_FOLDER)
