@@ -2,11 +2,19 @@ import streamlit as st
 import os
 from PIL import Image
 import shutil
+import image_explore
 import model
+from model import cnn
 from zipfile import ZipFile
+import tensorflow as tf
 
 # フォルダのパスを指定
-UPLOAD_FOLDER = "./steam/uploads"
+#評価用
+UPLOAD_FOLDER = "./ceremony/uploads"
+#学習用
+DATA_FOLDER = "./ceremony/data"
+#モデルの場所
+MODEL = "./ceremony/my_model"
 
 def save_uploaded_file(uploaded_file):
     # フォルダが存在しない場合は作成する
@@ -18,9 +26,15 @@ def save_uploaded_file(uploaded_file):
         f.write(uploaded_file.getbuffer())
     return file_path
 
+def train():
+  #cnnのモデルに学習させる
+  st.title("モデルに学習させますか？")
+  if st.button("Click me"):
+      cnn()
+      st.write("学習完了しました。モデルは最新です")
+
 def main():
     st.title("結婚式場の画像をアップロードしてください")
-
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
     UPLOAD_FOLDER = "./steam/uploads"
@@ -55,7 +69,12 @@ def main():
         if submit_button:
             selected_files = [file_name for file_name in os.listdir(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)) if file_name.split(".")[-1] in image_extensions]
             st.write(selected_files)
-            model.process_data(selected_files)
+            data = image_explore.get_image_files(UPLOAD_FOLDER)
+            # モデルを読み込む
+            loaded_model = tf.keras.models.load_model(MODEL)
+            # モデルを使用して予測を行う
+            predictions = loaded_model.predict(data)
+            predictions.to_csv("predictions.csv",index=False)
 
 if __name__ == "__main__":
     main()
