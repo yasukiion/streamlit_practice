@@ -26,14 +26,12 @@ def save_uploaded_file(uploaded_file):
         f.write(uploaded_file.getbuffer())
     return file_path
 
-def train():
-  #cnnのモデルに学習させる
-  st.title("モデルに学習させますか？")
-  if st.button("Click me"):
+def main():
+    #cnnのモデルに学習させる
+    st.title("モデルに学習させますか？")
+    if st.button("Click me"):
       cnn()
       st.write("学習完了しました。モデルは最新です")
-
-def main():
     st.title("結婚式場の画像をアップロードしてください")
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
