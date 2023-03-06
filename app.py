@@ -35,7 +35,6 @@ def main():
     st.title("結婚式場の画像をアップロードしてください")
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
-    UPLOAD_FOLDER = "./steam/uploads"
     if folder:
         # zipファイルを展開する
         path = os.path.join(os.getcwd(), folder.name)
@@ -58,8 +57,8 @@ def main():
         # Zipファイルを展開する
         with ZipFile(folder, "r") as zip:
           zip.extractall(UPLOAD_FOLDER)
-          os.remove("./steam/uploads/名称未設定フォルダ.zip")
-        shutil.rmtree("./steam/uploads/__MACOSX")
+          os.remove("./ceremony/uploads/名称未設定フォルダ.zip")
+        shutil.rmtree("./ceremony/uploads/__MACOSX")
 
         # サブミットボタンでフォームをサブミットする
         form = st.form(key='my-form')
