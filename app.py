@@ -17,6 +17,8 @@ UPLOAD_FOLDER = "./ceremony/uploads"
 DATA_FOLDER = "./ceremony/data"
 #モデルの場所
 MODEL_FOLDER = "./ceremony/my_model"
+#なぜか作られてしまうゴミフォルダ
+MACOSX = "./ceremony/uploads/__MACOSX"
 
 def save_uploaded_file(uploaded_file):
     # フォルダが存在しない場合は作成する
@@ -47,8 +49,8 @@ def main():
         os.makedirs(os.path.join(os.getcwd(), UPLOAD_FOLDER), exist_ok=True)
         extract_path = os.path.join(os.getcwd(), UPLOAD_FOLDER)
         shutil.unpack_archive(path, extract_path)
-        #shutil.rmtree(path)
-        os.remove(path)
+        if os.path.exists(path):
+            os.remove(path)
         #予測用のデータが入っているzipファイル
         PREDICTION_ZIP = save_uploaded_file(folder)
         #予測用のデータが入っているフォルダ
@@ -58,11 +60,13 @@ def main():
         with ZipFile(folder, "r") as zip:
           zip.extractall(UPLOAD_FOLDER)
           os.remove(PREDICTION_ZIP)
-        shutil.rmtree("./ceremony/uploads/__MACOSX")
-
-        st.title("画像をチェックする(任意)")
+        if os.path.exist(MACOSX):
+            shutil.rmtree(MACOSX)
+        
+        #画像の目視チェック
+        st.title("画像のチェック(任意)")
         if st.button("Check now!"):
-            image_check(UPLOAD_FOLDER,PREDICTION_ZIP)
+            image_check(UPLOAD_FOLDER,PREDICTION_ZIP,PREDICTION_FOLDER)
 
         # サブミットボタンでフォームをサブミットする
         st.title("予測を行います")
@@ -70,7 +74,7 @@ def main():
         submit_button = form.form_submit_button('Submit!')
         if submit_button:
             #入力した画像をモデルが読み込める形に変える
-            data = image_explore.get_image_files(PREDICTION_FOLDER)
+            #data = image_explore.get_image_files(PREDICTION_FOLDER)
             pre_dataset = image_2_dataset(PREDICTION_FOLDER)
             # モデルを読み込む
             loaded_model = tf.keras.models.load_model(MODEL_FOLDER)
