@@ -5,6 +5,7 @@ import shutil
 import image_explore
 import model
 from model import cnn
+from image_check import image_check
 from image2dataset import image_2_dataset
 from zipfile import ZipFile
 import tensorflow as tf
@@ -30,7 +31,7 @@ def save_uploaded_file(uploaded_file):
 def main():
     #cnnのモデルに学習させる
     st.title("モデルに学習させますか？")
-    if st.button("Click me"):
+    if st.button("Train now!"):
       cnn(DATA_FOLDER,MODEL_FOLDER)
       st.write("学習完了しました。cnnモデルは最新です")
     
@@ -44,33 +45,28 @@ def main():
         with open(path, "wb") as f:
             f.write(folder.getbuffer())
         os.makedirs(os.path.join(os.getcwd(), UPLOAD_FOLDER), exist_ok=True)
-        shutil.unpack_archive(path, os.path.join(os.getcwd(),UPLOAD_FOLDER))
-        st.write(path)
-
+        extract_path = os.path.join(os.getcwd(), UPLOAD_FOLDER)
+        shutil.unpack_archive(path, extract_path)
+        shutil.rmtree(path)
+        #予測用のデータが入っているzipファイル
+        PREDICTION_ZIP = save_uploaded_file(folder)
         #予測用のデータが入っているフォルダ
-        PREDICTION_FOLDER = save_uploaded_file(folder)
-        st.write(PREDICTION_FOLDER)
-
-        # フォルダ内の画像を表示する
-        image_extensions = ["jpg", "jpeg", "png"]
-        image_folder = st.sidebar.selectbox("Select a folder", os.listdir(os.path.join(os.getcwd(),UPLOAD_FOLDER)))
-        for file_name in os.listdir(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder))):
-            if file_name.split(".")[-1] in image_extensions:
-                image_path = os.path.join(os.path.join(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)), file_name)
-                image = Image.open(image_path)
-                st.image(image, caption=file_name, use_column_width=True)
-                file_path = save_uploaded_file(folder)
-                st.write("Saved file:", file_path)
+        PREDICTION_FOLDER = os.path.join(extract_path, os.path.splitext(folder.name)[0])
 
         # Zipファイルを展開する
         with ZipFile(folder, "r") as zip:
           zip.extractall(UPLOAD_FOLDER)
-          os.remove(PREDICTION_FOLDER)
+          os.remove(PREDICTION_ZIP)
         shutil.rmtree("./ceremony/uploads/__MACOSX")
 
+        st.title("画像をチェックする(任意)")
+        if st.button("Check now!"):
+            image_check(UPLOAD_FOLDER,PREDICTION_ZIP)
+
         # サブミットボタンでフォームをサブミットする
+        st.title("予測を行います")
         form = st.form(key='my-form')
-        submit_button = form.form_submit_button('Submit')
+        submit_button = form.form_submit_button('Submit!')
         if submit_button:
             #入力した画像をモデルが読み込める形に変える
             data = image_explore.get_image_files(PREDICTION_FOLDER)
@@ -82,6 +78,7 @@ def main():
             predictions = loaded_model.predict(pre_dataset)
             #csvに変換
             predictions.to_csv("predictions.csv",index=False)
+        st.title("結果のダウンロード(csv)")
 
 if __name__ == "__main__":
     main()
