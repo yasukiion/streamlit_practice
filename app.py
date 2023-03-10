@@ -60,8 +60,7 @@ def main():
                 image = Image.open(image_path)
                 st.image(image, caption=file_name, use_column_width=True)
                 file_path = save_uploaded_file(folder)
-                st.write("Saved file:", PREDICTION_FOLDER)
-        st.write(PREDICTION_FOLDER)
+                st.write("Saved file:", file_path)
 
         # Zipファイルを展開する
         with ZipFile(folder, "r") as zip:
