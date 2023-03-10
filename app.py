@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import pandas as pd
 from PIL import Image
 import shutil
 import image_explore
@@ -9,6 +10,7 @@ from image_check import image_check
 from image2dataset import image_2_dataset
 from zipfile import ZipFile
 import tensorflow as tf
+import datetime
 
 # フォルダのパスを指定
 #予測用のフォルダ
@@ -19,6 +21,16 @@ DATA_FOLDER = "./ceremony/data"
 MODEL_FOLDER = "./ceremony/my_model"
 #なぜか作られてしまうゴミフォルダ
 MACOSX = "./ceremony/uploads/__MACOSX"
+#csvファイルを保存するフォルダ
+# 現在の日付を取得する
+today = datetime.date.today()
+# CSVファイル名に日付を付けて生成する
+csvname = f"predictions_{today}.csv"
+# CSVファイルの保存先ディレクトリのパスを指定する
+save_dir = "/csv/"
+# 保存先のパスとファイル名を結合する
+csvpath = os.path.join(save_dir, csvname)
+
 
 def save_uploaded_file(uploaded_file):
     # フォルダが存在しない場合は作成する
@@ -60,7 +72,7 @@ def main():
         with ZipFile(folder, "r") as zip:
           zip.extractall(UPLOAD_FOLDER)
           os.remove(PREDICTION_ZIP)
-        if os.path.exist(MACOSX):
+        if os.path.exists(MACOSX):
             shutil.rmtree(MACOSX)
         
         #画像の目視チェック
@@ -79,11 +91,14 @@ def main():
             # モデルを読み込む
             loaded_model = tf.keras.models.load_model(MODEL_FOLDER)
             # モデルを使用して予測を行う
-            #エポック数いらないよね？
             predictions = loaded_model.predict(pre_dataset)
-            #csvに変換
-            predictions.to_csv("predictions.csv",index=False)
+            # 予測結果をデータフレームに変換する
+            predictions_df = pd.DataFrame({'filename': predictions.map(lambda x, y: x).map(lambda x: x.numpy().decode('utf-8')),
+                               'predicted_label': predictions.argmax(axis=1)})
+            # csvファイルに保存する
+            predictions_df.to_csv(csvpath, index=False)
         st.title("結果のダウンロード(csv)")
+        
 
 if __name__ == "__main__":
     main()
