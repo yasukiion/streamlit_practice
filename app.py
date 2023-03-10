@@ -11,7 +11,7 @@ import tensorflow as tf
 
 # フォルダのパスを指定
 #予測用
-UPLOAD_FOLDER = "/ceremony/uploads"
+UPLOAD_FOLDER = "ceremony/uploads"
 #学習用
 DATA_FOLDER = "./ceremony/data"
 #モデルの場所
