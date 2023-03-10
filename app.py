@@ -10,8 +10,8 @@ from zipfile import ZipFile
 import tensorflow as tf
 
 # フォルダのパスを指定
-#予測用
-UPLOAD_FOLDER = "ceremony/uploads"
+#予測用のフォルダ
+UPLOAD_FOLDER = "/Users/nobutair/ceremony/uploads"
 #学習用
 DATA_FOLDER = "./ceremony/data"
 #モデルの場所
@@ -45,6 +45,9 @@ def main():
         shutil.unpack_archive(path, os.path.join(os.getcwd(),UPLOAD_FOLDER))
         st.write(path)
 
+        #予測用のデータが入っているフォルダ
+        PREDICTION_FOLDER = path
+
         # フォルダ内の画像を表示する
         image_extensions = ["jpg", "jpeg", "png"]
         image_folder = st.sidebar.selectbox("Select a folder", os.listdir(os.path.join(os.getcwd(),UPLOAD_FOLDER)))
@@ -55,6 +58,7 @@ def main():
                 st.image(image, caption=file_name, use_column_width=True)
                 file_path = save_uploaded_file(folder)
                 st.write("Saved file:", file_path)
+
 
         # Zipファイルを展開する
         with ZipFile(folder, "r") as zip:
