@@ -11,7 +11,7 @@ import tensorflow as tf
 
 # フォルダのパスを指定
 #予測用
-UPLOAD_FOLDER = "./ceremony/uploads"
+UPLOAD_FOLDER = "/ceremony/uploads"
 #学習用
 DATA_FOLDER = "./ceremony/data"
 #モデルの場所
@@ -39,11 +39,11 @@ def main():
     if folder:
         # zipファイルを展開する
         path = os.path.join(os.getcwd(), folder.name)
-        st.write(path)
         with open(path, "wb") as f:
             f.write(folder.getbuffer())
         os.makedirs(os.path.join(os.getcwd(), UPLOAD_FOLDER), exist_ok=True)
         shutil.unpack_archive(path, os.path.join(os.getcwd(),UPLOAD_FOLDER))
+        st.write(path)
 
         # フォルダ内の画像を表示する
         image_extensions = ["jpg", "jpeg", "png"]
