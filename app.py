@@ -5,16 +5,17 @@ import shutil
 import image_explore
 import model
 from model import cnn
+from image2dataset import image_2_dataset
 from zipfile import ZipFile
 import tensorflow as tf
 
 # フォルダのパスを指定
-#評価用
+#予測用
 UPLOAD_FOLDER = "./ceremony/uploads"
 #学習用
 DATA_FOLDER = "./ceremony/data"
 #モデルの場所
-MODEL = "./ceremony/my_model"
+MODEL_FOLDER = "./ceremony/my_model"
 
 def save_uploaded_file(uploaded_file):
     # フォルダが存在しない場合は作成する
@@ -30,8 +31,8 @@ def main():
     #cnnのモデルに学習させる
     st.title("モデルに学習させますか？")
     if st.button("Click me"):
-      cnn()
-      st.write("学習完了しました。モデルは最新です")
+      cnn(DATA_FOLDER,MODEL_FOLDER)
+      st.write("学習完了しました。cnnモデルは最新です")
     st.title("結婚式場の画像をアップロードしてください")
     # フォルダをアップロードする
     folder = st.file_uploader("Upload a folder", type="zip")
@@ -64,13 +65,15 @@ def main():
         form = st.form(key='my-form')
         submit_button = form.form_submit_button('Submit')
         if submit_button:
-            selected_files = [file_name for file_name in os.listdir(os.path.join(os.getcwd(),UPLOAD_FOLDER, image_folder)) if file_name.split(".")[-1] in image_extensions]
-            st.write(selected_files)
+            #入力した画像をモデルが読み込める形に変える
             data = image_explore.get_image_files(UPLOAD_FOLDER)
+            pre_dataset = image_2_dataset(UPLOAD_FOLDER)
             # モデルを読み込む
-            loaded_model = tf.keras.models.load_model(MODEL)
+            loaded_model = tf.keras.models.load_model(MODEL_FOLDER)
             # モデルを使用して予測を行う
-            predictions = loaded_model.predict(data)
+            #エポック数いらないよね？
+            predictions = loaded_model.predict(pre_dataset)
+            #csvに変換
             predictions.to_csv("predictions.csv",index=False)
 
 if __name__ == "__main__":

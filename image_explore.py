@@ -1,11 +1,7 @@
 import streamlit as st
-# 別のファイルで定義された関数をインポート
 from PIL import Image
 import numpy as np
 import os
-
-# フォルダのパスを指定
-UPLOAD_FOLDER = "./ceremony/uploads"
 
 # 指定されたディレクトリからすべての画像ファイルを取得する関数
 def get_image_files(directory):

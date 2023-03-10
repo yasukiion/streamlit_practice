@@ -8,8 +8,7 @@ from tensorflow.keras.metrics import AUC
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 #式場の画像を学習していくcnnモデル
-def cnn ():
-
+def cnn (image_folder_path,my_model):
   # ディレクトリ内の画像ファイルを取得する関数
   def get_image_files(directory):
       image_extensions = {"png", "jpg", "jpeg", "gif", "bmp"}
@@ -30,7 +29,6 @@ def cnn ():
       return np.asarray(images)
 
   # 画像フォルダのパスとラベルを定義する
-  image_folder_path = "./ceremony/data"
   label_dict = {"not_ceremonyHall": 0, "ceremonyHall": 1}
   batch_size = 32
 
@@ -106,7 +104,7 @@ def cnn ():
             validation_steps=val_steps_per_epoch)
   
   # モデルを保存する
-  model.save('./ceremony/my_model')
+  model.save(my_model)
 
   # モデルの評価
   test_loss, test_auc = model.evaluate(val_dataset, steps=val_steps_per_epoch)
