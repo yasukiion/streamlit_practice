@@ -47,7 +47,8 @@ def main():
         os.makedirs(os.path.join(os.getcwd(), UPLOAD_FOLDER), exist_ok=True)
         extract_path = os.path.join(os.getcwd(), UPLOAD_FOLDER)
         shutil.unpack_archive(path, extract_path)
-        shutil.rmtree(path)
+        #shutil.rmtree(path)
+        #os.remove(path)
         #予測用のデータが入っているzipファイル
         PREDICTION_ZIP = save_uploaded_file(folder)
         #予測用のデータが入っているフォルダ
