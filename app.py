@@ -39,6 +39,7 @@ def main():
     if folder:
         # zipファイルを展開する
         path = os.path.join(os.getcwd(), folder.name)
+        st.write(path)
         with open(path, "wb") as f:
             f.write(folder.getbuffer())
         os.makedirs(os.path.join(os.getcwd(), UPLOAD_FOLDER), exist_ok=True)
