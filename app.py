@@ -94,7 +94,7 @@ def main():
             predictions = loaded_model.predict(pre_dataset)
             # 予測結果をデータフレームに変換する
             predictions_df = pd.DataFrame({"filename":pre_filenames,"predicted_label":predictions.argmax(axis=1)})
-            predictions_df['filename'] = [os.path.basename(f.decode('utf-8')) for f in pre_filenames]
+            predictions_df['filename'] = [os.path.basename(f) for f in pre_filenames]
             # csvファイルに保存するs
             predictions_df.to_csv(csvpath, index=False)
             st.write("予測が無事に完了しました")
