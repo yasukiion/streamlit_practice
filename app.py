@@ -14,13 +14,13 @@ import datetime
 
 # フォルダのパスを指定
 #予測用のフォルダ
-UPLOAD_FOLDER = "./ceremony/uploads"
+UPLOAD_FOLDER = "/ceremony/uploads"
 #学習用
-DATA_FOLDER = "./ceremony/data"
+DATA_FOLDER = "/ceremony/data"
 #モデルの場所
-MODEL_FOLDER = "./ceremony/my_model"
+MODEL_FOLDER = "/ceremony/my_model"
 #なぜか作られてしまうゴミフォルダ
-MACOSX = "./ceremony/uploads/__MACOSX"
+MACOSX = "/ceremony/uploads/__MACOSX"
 #csvファイルを保存するフォルダ
 # 現在の日付を取得する
 today = datetime.date.today()
@@ -30,7 +30,6 @@ csvname = f"predictions_{today}.csv"
 save_dir = "/csv/"
 # 保存先のパスとファイル名を結合する
 csvpath = os.path.join(save_dir, csvname)
-
 
 def save_uploaded_file(uploaded_file):
     # フォルダが存在しない場合は作成する
@@ -98,7 +97,6 @@ def main():
             # csvファイルに保存する
             predictions_df.to_csv(csvpath, index=False)
         st.title("結果のダウンロード(csv)")
-        
 
 if __name__ == "__main__":
     main()
