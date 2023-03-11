@@ -87,15 +87,13 @@ def main():
         if submit_button:
             #入力した画像をモデルが読み込める形に変える
             #data = image_explore.get_image_files(PREDICTION_FOLDER)
-            pre_dataset = image_2_dataset(PREDICTION_FOLDER)
+            pre_dataset, pre_filenames = image_2_dataset(PREDICTION_FOLDER)
             # モデルを読み込む
             loaded_model = tf.keras.models.load_model(MODEL_FOLDER)
             # モデルを使用して予測を行う
             predictions = loaded_model.predict(pre_dataset)
             # 予測結果をデータフレームに変換する
-            # 予測結果をデータフレームに変換する
-            predictions_df = pd.DataFrame({'filename': [os.path.basename(x) for x in pre_dataset.filenames],
-                               'predicted_label': predictions.argmax(axis=1)})
+            predictions_df = pd.DataFrame({"filename":pre_filenames,"predicted_label":predictions.argmax(axis=1)})
             # csvファイルに保存するs
             predictions_df.to_csv(csvpath, index=False)
         st.title("結果のダウンロード(csv)")
