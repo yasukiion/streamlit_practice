@@ -14,13 +14,13 @@ import datetime
 
 # フォルダのパスを指定
 #予測用のフォルダ
-UPLOAD_FOLDER = "nobutair/ceremony/uploads"
+UPLOAD_FOLDER = "./ceremony/uploads"
 #学習用
-DATA_FOLDER = "nobutair/ceremony/data"
+DATA_FOLDER = "./ceremony/data"
 #モデルの場所
-MODEL_FOLDER = "nobutair/ceremony/my_model"
+MODEL_FOLDER = "./ceremony/my_model"
 #なぜか作られてしまうゴミフォルダ
-MACOSX = "nobutair/ceremony/uploads/__MACOSX"
+MACOSX = "./ceremony/uploads/__MACOSX"
 #csvファイルを保存するフォルダ
 # 現在の日付を取得する
 today = datetime.date.today()
