@@ -77,12 +77,13 @@ def main():
         #画像の目視チェック
         st.title("画像のチェック(任意)")
         if st.button("Check now!"):
-            image_check(UPLOAD_FOLDER,PREDICTION_ZIP,PREDICTION_FOLDER)
+            image_check(UPLOAD_FOLDER,PREDICTION_FOLDER)
 
         # サブミットボタンでフォームをサブミットする
         st.title("予測を行います")
         form = st.form(key='my-form')
         submit_button = form.form_submit_button('Submit!')
+        st.write(PREDICTION_FOLDER)
         if submit_button:
             #入力した画像をモデルが読み込める形に変える
             #data = image_explore.get_image_files(PREDICTION_FOLDER)
