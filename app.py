@@ -93,7 +93,8 @@ def main():
             # モデルを使用して予測を行う
             predictions = loaded_model.predict(pre_dataset)
             # 予測結果をデータフレームに変換する
-            predictions_df = pd.DataFrame({'filename': predictions.map(lambda x, y: x).map(lambda x: x.numpy().decode('utf-8')),
+            # 予測結果をデータフレームに変換する
+            predictions_df = pd.DataFrame({'filename': [x.decode('utf-8') for x in pre_dataset.filenames],
                                'predicted_label': predictions.argmax(axis=1)})
             # csvファイルに保存する
             predictions_df.to_csv(csvpath, index=False)
