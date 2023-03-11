@@ -8,6 +8,7 @@ import model
 from model import cnn
 from image_check import image_check
 from image2dataset import image_2_dataset
+from download_button import download_button
 from zipfile import ZipFile
 import tensorflow as tf
 import datetime
@@ -27,7 +28,7 @@ today = datetime.date.today()
 # CSVファイル名に日付を付けて生成する
 csvname = f"predictions_{today}.csv"
 # CSVファイルの保存先ディレクトリのパスを指定する
-save_dir = "/csv/"
+save_dir = "./ceremony/csv"
 # 保存先のパスとファイル名を結合する
 csvpath = os.path.join(save_dir, csvname)
 
@@ -83,7 +84,6 @@ def main():
         st.title("予測を行います")
         form = st.form(key='my-form')
         submit_button = form.form_submit_button('Submit!')
-        st.write(PREDICTION_FOLDER)
         if submit_button:
             #入力した画像をモデルが読み込める形に変える
             #data = image_explore.get_image_files(PREDICTION_FOLDER)
@@ -94,9 +94,12 @@ def main():
             predictions = loaded_model.predict(pre_dataset)
             # 予測結果をデータフレームに変換する
             predictions_df = pd.DataFrame({"filename":pre_filenames,"predicted_label":predictions.argmax(axis=1)})
+            predictions_df['filename'] = [os.path.basename(f.decode('utf-8')) for f in pre_dataset.filenames]
             # csvファイルに保存するs
             predictions_df.to_csv(csvpath, index=False)
-        st.title("結果のダウンロード(csv)")
+            st.write("予測が無事に完了しました")
+            st.title("結果のダウンロード(csv)")
+            download_button(predictions_df,csvname)
 
 if __name__ == "__main__":
     main()
