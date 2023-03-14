@@ -84,7 +84,7 @@ def main():
         
         #画像の目視チェック
         st.title("画像のチェック(任意)")
-        if st.button("Check now!"):
+        if st.button("look!"):
             image_check(UPLOAD_FOLDER,PREDICTION_FOLDER)
 
         #拾い画像かどうかをチェック
@@ -113,7 +113,7 @@ def main():
             predictions_df.to_csv(csv_pre, index=False)
             st.write("予測が完了しました")
             #拾い画チェックした結果と予測した結果を画像名称でjoin
-            result_df
+            result_df = pd.merge(df_plagiarism_check, predictions_df, on='filename')
             result_df.to_csv(csv_res, index=False)
             st.title("結果のダウンロード(csv)")
             download_button(result_df,res_csv_name)
