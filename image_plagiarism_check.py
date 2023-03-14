@@ -6,8 +6,7 @@ from google.cloud.vision_v1 import types
 from google.oauth2 import service_account
 
 # APIキーを設定する
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "AIzaSyAqmcejSp7PPjXkaV71-KvlI-5PTvij0OI"
-
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./ceremony/client_secret_569573701758-7ld71vfmgde35im51hk7b68lbjbrq85c.apps.googleusercontent.com.json"
 # プロジェクトIDを設定する
 PROJECT_ID = 'semiotic-pact-380611'
 
