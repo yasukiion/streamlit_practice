@@ -93,6 +93,7 @@ def main():
         if st.button("Check now!"):
             df_plagiarism_check = batch_process_images(PREDICTION_FOLDER)
             df_plagiarism_check.to_csv(csv_che, index=False)
+            st.write("拾い画チェックが完了しました。予測作業に進んでください。")
 
         # サブミットボタンでフォームをサブミットする
         st.title("予測を行います")
@@ -109,10 +110,11 @@ def main():
             # 予測結果をデータフレームに変換する
             predictions_df = pd.DataFrame({"filename":pre_filenames,"predicted_label":predictions.argmax(axis=1)})
             predictions_df['filename'] = [os.path.basename(f) for f in pre_filenames]
-            # csvファイルに保存するs
+            # csvファイルに保存する
             predictions_df.to_csv(csv_pre, index=False)
             st.write("予測が完了しました")
             #拾い画チェックした結果と予測した結果を画像名称でjoin
+            df_plagiarism_check = batch_process_images(PREDICTION_FOLDER)
             result_df = pd.merge(df_plagiarism_check, predictions_df, on='filename')
             result_df.to_csv(csv_res, index=False)
             st.title("結果のダウンロード(csv)")
