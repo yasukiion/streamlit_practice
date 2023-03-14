@@ -4,14 +4,15 @@ import pandas as pd
 from PIL import Image
 import shutil
 import image_explore
-import model
+import tensorflow as tf
+import datetime
 from model import cnn
 from image_check import image_check
 from image2dataset import image_2_dataset
 from download_button import download_button
+from image_plagiarism_check import is_similar_image,batch_process_images
 from zipfile import ZipFile
-import tensorflow as tf
-import datetime
+
 
 # フォルダのパスを指定
 #予測用のフォルダ
@@ -26,11 +27,17 @@ MACOSX = "./ceremony/uploads/__MACOSX"
 # 現在の日付を取得する
 today = datetime.date.today()
 # CSVファイル名に日付を付けて生成する
-csvname = f"predictions_{today}.csv"
+che_csv_name = f"check_{today}.csv"
+pre_csv_name = f"prediction_{today}.csv"
+res_csv_name = f"result_{today}.csv"
 # CSVファイルの保存先ディレクトリのパスを指定する
-save_dir = "./ceremony/csv"
+save_check = "./ceremony/check"
+save_prediction = "./ceremony/prediction"
+save_dir = "./ceremony/result"
 # 保存先のパスとファイル名を結合する
-csvpath = os.path.join(save_dir, csvname)
+csv_che = os.path.join(save_check, che_csv_name)
+csv_pre = os.path.join(save_prediction, pre_csv_name)
+csv_res = os.path.join(save_dir, res_csv_name)
 
 def save_uploaded_file(uploaded_file):
     # フォルダが存在しない場合は作成する
@@ -80,6 +87,13 @@ def main():
         if st.button("Check now!"):
             image_check(UPLOAD_FOLDER,PREDICTION_FOLDER)
 
+        #拾い画像かどうかをチェック
+        # 画像ファイルが保存されているフォルダのパスを指定して、一括で判定する
+        st.title("拾い画かどうかチェック")
+        if st.button("Check now!"):
+            df_plagiarism_check = batch_process_images(PREDICTION_FOLDER)
+            df_plagiarism_check.to_csv(csv_che, index=False)
+
         # サブミットボタンでフォームをサブミットする
         st.title("予測を行います")
         form = st.form(key='my-form')
@@ -96,10 +110,13 @@ def main():
             predictions_df = pd.DataFrame({"filename":pre_filenames,"predicted_label":predictions.argmax(axis=1)})
             predictions_df['filename'] = [os.path.basename(f) for f in pre_filenames]
             # csvファイルに保存するs
-            predictions_df.to_csv(csvpath, index=False)
-            st.write("予測が無事に完了しました")
+            predictions_df.to_csv(csv_pre, index=False)
+            st.write("予測が完了しました")
+            #拾い画チェックした結果と予測した結果を画像名称でjoin
+            result_df
+            result_df.to_csv(csv_res, index=False)
             st.title("結果のダウンロード(csv)")
-            download_button(predictions_df,csvname)
+            download_button(result_df,res_csv_name)
 
 if __name__ == "__main__":
     main()
