@@ -1,10 +1,9 @@
 import io
 import os
 import pandas as pd
-from google.cloud import vision
-from google.cloud.vision import types
+from google.cloud import vision_v1
+from google.cloud.vision_v1 import types
 from google.oauth2 import service_account
-from google.cloud import vision
 
 # APIキーを設定する
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "AIzaSyAqmcejSp7PPjXkaV71-KvlI-5PTvij0OI"
@@ -26,7 +25,7 @@ def is_similar_image(filename):
     image = types.Image(content=content)
 
     # Vision APIに接続する
-    client = vision.ImageAnnotatorClient(credentials=credentials)
+    client = vision_v1.ImageAnnotatorClient(credentials=credentials)
 
     # 画像を分析し、拾い画像かどうかを判定する
     response = client.safe_search_detection(image=image)
