@@ -19,17 +19,17 @@ def is_similar_image(filename):
     # 画像ファイルを読み込む
     with io.open(filename, 'rb') as image_file:
         content = image_file.read()
-    image = types.Image(content=content)
+    image = vision_v1.Image(content=content)
 
     # Vision APIに接続する
     client = vision_v1.ImageAnnotatorClient(credentials=credentials)
 
     # 画像を分析し、拾い画像かどうかを判定する
-    response = client.safe_search_detection(image=image)
-    if response.safe_search_annotation.adult == 5 or response.safe_search_annotation.violence == 5 or response.safe_search_annotation.racy == 5:
-        return True
-    else:
-        return False
+    response = client.web_detection(image=image)
+    for web_entity in response.web_detection.web_entities:
+        if web_entity.score > 0.5 and web_entity.entity_id:
+            return True
+    return False
 
 # 指定されたフォルダにある画像ファイルを一括で判定する
 def batch_process_images(folder_path):
