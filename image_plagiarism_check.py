@@ -27,9 +27,9 @@ def is_similar_image(filename):
     # 画像を分析し、拾い画像かどうかを判定する
     response = client.safe_search_detection(image=image)
     if response.safe_search_annotation.adult == 5 or response.safe_search_annotation.violence == 5 or response.safe_search_annotation.racy == 5:
-        return {'is_similar_image': True}
+        return True
     else:
-        return {'is_similar_image': False}
+        return False
 
 # 指定されたフォルダにある画像ファイルを一括で判定する
 def batch_process_images(folder_path):
